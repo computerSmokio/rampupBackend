@@ -1,0 +1,28 @@
+- name: Deploy Containers
+  hosts: ec2
+  become: True
+  tasks:
+    - name: Install Dependencies (docker)
+      yum:
+        name: docker
+        state: present
+    - name: Install Dependencies (pip)
+     yum:
+        name: python-pip
+    - name: Install Dependencies (docker pip module)
+      pip: 
+        name: docker-py
+        state: present
+    - name: Get password
+      shell: aws ecr get-login-password --region sa-east-1
+      register: command_pass
+    - name: Login docker repo
+      shell: docker login --username AWS --password {{command_pass.stdout}} 419466290453.dkr.ecr.sa-east-1.amazonaws.com
+    - name: Pull container
+      docker_container:
+        name: backend
+        image: 419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-repo:backend
+        state: started
+        ports:
+          - "3306:3306"
+          - "3000:3000"
