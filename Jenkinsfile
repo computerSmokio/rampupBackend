@@ -19,7 +19,7 @@ stage('Push & Deploy') {
         }
         //Para conseguir los hosts: aws ec2 describe-instances --filter "Name=instance.group-name,Values=sg_backend" --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text
         withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
-            sh "ansible-playbook -i inventory.yaml -u ec2-user --private-key $ssh_key deploy_containers.yaml"
+            sh "ansible-playbook -i inventory.ini -u ec2-user --private-key $ssh_key deploy_containers.yaml"
         }
     }
 }
