@@ -26,3 +26,4 @@
         ports:
           - "3306:3306"
           - "3000:3000"
+        env_file: "/home/ec2-user/env.txt"
