@@ -7,7 +7,6 @@ COPY ./package.json /app
 
 RUN npm install
 
-
 COPY . /app
 
 ARG DB_PORT
