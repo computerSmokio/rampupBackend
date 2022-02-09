@@ -9,7 +9,8 @@ stage('GitCheckout & Build') {
 }
 stage('Test'){
     app.inside{
-        sh 'ls'
+        sh 'npm install'
+        sh 'npm test'
     }
 }
 stage('Push & Deploy') {

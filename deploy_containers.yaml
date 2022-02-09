@@ -7,7 +7,7 @@
         name: docker
         state: present
     - name: Install Dependencies (pip)
-     yum:
+      yum:
         name: python-pip
     - name: Install Dependencies (docker pip module)
       pip: 
