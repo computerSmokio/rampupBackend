@@ -7,6 +7,11 @@ stage('GitCheckout & Build') {
         //apply the dockerfile and push the image, nothing else needed
     }
 }
+stage('Test'){
+    app.inside{
+        sh 'npm test'
+    }
+}
 stage('Push & Deploy') {
     milestone()
     node {
