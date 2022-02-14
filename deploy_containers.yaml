@@ -21,7 +21,7 @@
     - name: Pull & Deploy container
       docker_container:
         name: backend
-        image: 419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-repo:backend
+        image: 419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-backend:latest
         pull: True
         state: started
         ports:
