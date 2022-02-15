@@ -1,9 +1,7 @@
 stage('GitCheckout & Build') {
-    // The first milestone step starts tracking concurrent build order
     milestone()
     node {
         checkout scm
-
         app = docker.build("419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-backend:latest")
     }
 }
