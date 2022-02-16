@@ -25,6 +25,12 @@
         pull: True
         state: started
         ports:
-          - "3306:3306"
-          - "3000:3000"
-        env_file: "/home/ec2-user/env.txt"
+          - "{{ backend_port }}:{{ backend_port }}"
+        env:
+          - db_port: "{{ db_port }}"
+          - db_entrypoint: "{{ db_entrypoint }}"
+          - db_user: "{{ db_user }}"
+          - db_port: "{{ db_port }}"
+          - db_pass: "{{ db_pass }}" 
+          - db_name: "{{ db_name }}" 
+          - port: "{{ backend_port }}"

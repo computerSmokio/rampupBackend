@@ -12,6 +12,14 @@ stage('Test'){
     }
 }
 stage('Push & Deploy') {
+    enviroment{
+        db_port=credentials('db_port')
+        db_entrypoint=credentials('db_entrypoint')
+        db_user=credentials('db_user')
+        db_pass=credentials('db_pass')
+        db_name=credentials('db_name')
+        backend_port=credentials('backend_port')
+    }
     milestone()
     node {
         docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
@@ -29,7 +37,8 @@ stage('Push & Deploy') {
             sh "aws ec2 describe-instances --filter Name=instance.group-name,Values=sg_backend --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text >> inventory.ini"
         }
         withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
-            sh "ansible-playbook -i inventory.ini -u ec2-user --private-key $ssh_key deploy_containers.yaml"
+            sh "ansible-playbook -i inventory.ini -u ec2-user --private-key $ssh_key deploy_containers.yaml \
+            --extra-vars 'db_port=${db_port} db_entrypoint=${db_entrypoint} db_user=${db_user} db_pass=${db_pass} db_name=${db_name} port=${backend_port}'"
         }
     }
 }
