@@ -1,16 +1,3 @@
-//stage('GitCheckout & Build') {
-//    milestone()
-//    node {
-//        checkout scm
-//        app = docker.build("419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-backend:latest")
-//    }
-//}
-//stage('Test'){
-//    app.inside{
-//        sh 'npm install'
-//        sh 'npm test'
-//    }
-//}
 pipeline{
     agent any
     environment{
@@ -22,11 +9,31 @@ pipeline{
         backend_port=credentials('backend_port')
     }
     stages{
+        stage('GitCheckout & Build') {
+            steps{
+                checkout scm
+                script{
+                    app = docker.build("419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-backend:latest")
+                }
+            }
+        }
+        stage('Test'){
+            steps{
+                script{
+                    app.inside{
+                        sh 'npm install'
+                        sh 'npm test'
+                    }
+                }
+            }
+        }
         stage('Push & Deploy') {
             steps{
-                //docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
-                //    app.push()
-                //}
+                script{
+                    docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
+                        app.push()
+                    }
+                }
                 sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                 sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
                 script{
