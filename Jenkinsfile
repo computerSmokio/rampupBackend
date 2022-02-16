@@ -22,10 +22,10 @@ stage('Push & Deploy') {
     }
     milestone()
     node {
-        docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
-            app.push()
-        }
-        //sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}})"
+        //docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
+        //    app.push()
+        //}
+        sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}})"
         sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}})"
         withCredentials([aws(credentialsId: 'aws_credentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             untaggedImages  = sh(
