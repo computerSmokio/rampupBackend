@@ -41,7 +41,7 @@ pipeline{
                     }
                     withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
                         sh "ansible-playbook -i inventory.ini -u ec2-user --private-key $ssh_key deploy_containers.yaml \
-                        --extra-vars 'db_port=${db_port} db_entrypoint=${db_entrypoint} db_user=${db_user} db_pass=${db_pass} db_name=${db_name} port=${backend_port}'"
+                        --extra-vars 'db_port=${db_port} db_entrypoint=${db_entrypoint} db_user=${db_user} db_pass=${db_pass} db_name=${db_name} backend_port=${backend_port}'"
                     }
                 }
             }
