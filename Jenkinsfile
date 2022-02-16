@@ -15,14 +15,12 @@ stage('Push & Deploy') {
 
     milestone()
     node {
-        environment{
-            db_port = credentials('db_port')
-            db_entrypoint = credentials('db_entrypoint')
-            db_user = credentials('db_user')
-            db_pass = credentials('db_pass')
-            db_name = credentials('db_name')
-            backend_port = credentials('backend_port')
-        }
+        db_port = credentials('db_port')
+        db_entrypoint = credentials('db_entrypoint')
+        db_user = credentials('db_user')
+        db_pass = credentials('db_pass')
+        db_name = credentials('db_name')
+        backend_port = credentials('backend_port')
         //docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
         //    app.push()
         //}
