@@ -1,6 +1,6 @@
 pipeline{
     agent any
-    enviroment{
+    environment {
         db_port=credentials('db_port')
         db_entrypoint=credentials('db_entrypoint')
         db_user=credentials('db_user')
@@ -10,20 +10,20 @@ pipeline{
     }
     stages {
         //stage('GitCheckout & Build') {
-        //    milestone()
-        //    node {
+        //    steps {
         //        checkout scm
         //        app = docker.build("419466290453.dkr.ecr.sa-east-1.amazonaws.com/rampup-backend:latest")
         //    }
         //}
         //stage('Test'){
+        //  steps{
         //    app.inside{
         //        sh 'npm install'
         //        sh 'npm test'
         //    }
+        //  }
         //}
         stage('Push & Deploy') {
-            milestone()
             steps {
                 docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
                     app.push()
