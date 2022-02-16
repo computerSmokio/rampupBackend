@@ -13,12 +13,12 @@
 //}
 stage('Push & Deploy') {
     environment{
-        db_port=credentials('db_port')
-        db_entrypoint=credentials('db_entrypoint')
-        db_user=credentials('db_user')
-        db_pass=credentials('db_pass')
-        db_name=credentials('db_name')
-        backend_port=credentials('backend_port')
+        db_port = credentials('db_port')
+        db_entrypoint = credentials('db_entrypoint')
+        db_user = credentials('db_user')
+        db_pass = credentials('db_pass')
+        db_name = credentials('db_name')
+        backend_port = credentials('backend_port')
     }
     milestone()
     node {
