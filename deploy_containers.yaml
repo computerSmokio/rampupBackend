@@ -25,7 +25,7 @@
         pull: True
         state: started
         ports:
-          - {{ backend_port }}:{{ backend_port }}
+          - "{{ backend_port }}:{{ backend_port }}"
         env:
           db_port: "{{ db_port }}"
           db_entrypoint: "{{ db_entrypoint }}"
