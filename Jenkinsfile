@@ -15,6 +15,7 @@ stage('Push & Deploy') {
 
     milestone()
     node {
+        checkout scm
         db_port = credentials('db_port')
         db_entrypoint = credentials('db_entrypoint')
         db_user = credentials('db_user')
