@@ -27,10 +27,9 @@
         ports:
           - "{{ backend_port }}:{{ backend_port }}"
         env:
-          db_port: "{{ db_port }}"
-          db_entrypoint: "{{ db_entrypoint }}"
-          db_user: "{{ db_user }}"
-          db_port: "{{ db_port }}"
-          db_pass: "{{ db_pass }}" 
-          db_name: "{{ db_name }}" 
-          port: "{{ backend_port }}"
+          DB_PORT: "{{ db_port }}"
+          DB_HOST: "{{ db_entrypoint }}"
+          DB_USER: "{{ db_user }}"
+          DB_PASS: "{{ db_pass }}" 
+          DB_NAME: "{{ db_name }}" 
+          PORT: "{{ backend_port }}"
