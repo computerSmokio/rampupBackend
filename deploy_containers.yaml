@@ -26,6 +26,8 @@
         state: started
         ports:
           - "{{ backend_port }}:{{ backend_port }}"
+          - "{{ DB_PORT }}:{{ DB_PORT }}"
+
         env:
           DB_PORT: "{{ db_port }}"
           DB_HOST: "{{ db_entrypoint }}"
