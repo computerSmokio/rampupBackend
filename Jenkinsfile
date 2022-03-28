@@ -9,13 +9,9 @@ pipeline{
                 }
             }
         }
-        stage('Test & Push'){
+        stage('Push'){
             steps{
                 script{
-                    app.inside{
-                        sh 'npm install'
-                        sh 'npm test'
-                    }
                     docker.withRegistry("https://419466290453.dkr.ecr.sa-east-1.amazonaws.com", "ecr:sa-east-1:aws_credentials"){
                         app.push()
                     }
