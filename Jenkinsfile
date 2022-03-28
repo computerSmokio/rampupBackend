@@ -1,12 +1,5 @@
 pipeline{
     agent any
-    environment{
-        db_entrypoint=credentials('db_entrypoint')
-        db_user=credentials('db_user')
-        db_pass=credentials('db_pass')
-        db_name=credentials('db_name')
-        backend_port=credentials('backend_port')
-    }
     stages{
         stage('GitCheckout & Build') {
             steps{
