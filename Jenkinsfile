@@ -34,17 +34,18 @@ pipeline{
                     }
                     sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                     sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
+                    master_node_ip  = sh(
+                        script: "aws ec2 describe-instances --region sa-east-1  --filter Name=instance.group-name,Values=master-node-sg --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text",
+                        returnStdout: true)
+                    master_node_ip=master_node_ip.substring(0,master_node_ip.indexOf('\n'))
                 }
             }
         }
         stage('Deploy') {
-            steps{
-                script{
+            steps {
                     withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
-                        sh "chef-run master-node /cookbooks/deploy_instances/recipes/deploy_backend.rb -i ${ssh_key} --chef-license"
+                        sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} sudo chef-client -o deploy_instances::deploy_backend"
                     }
-                }
             }
-        }
     }
 }
