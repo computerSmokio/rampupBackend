@@ -43,9 +43,10 @@ pipeline{
         }
         stage('Deploy') {
             steps {
-                    withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
-                        sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} sudo chef-client -o deploy_instances::deploy_backend"
-                    }
+                withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
+                    sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} sudo chef-client -o deploy_instances::deploy_backend"
+                }
             }
+        }
     }
 }
