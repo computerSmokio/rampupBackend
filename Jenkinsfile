@@ -20,13 +20,13 @@ pipeline{
                             script: "aws ecr list-images --region sa-east-1 --repository-name rampup-backend --filter tagStatus=UNTAGGED --query 'imageIds[*]' --output json ",
                             returnStdout: true)
                         sh "aws ecr batch-delete-image --region sa-east-1 --repository-name rampup-backend --image-ids '${untaggedImages}' || true"
+                        master_node_ip  = sh(
+                            script: "aws ec2 describe-instances --region sa-east-1  --filter Name=instance.group-name,Values=master-node-sg --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text",
+                            returnStdout: true)
+                        master_node_ip=master_node_ip.substring(0,master_node_ip.indexOf('\n'))
                     }
                     sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                     sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
-                    master_node_ip  = sh(
-                        script: "aws ec2 describe-instances --region sa-east-1  --filter Name=instance.group-name,Values=master-node-sg --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text",
-                        returnStdout: true)
-                    master_node_ip=master_node_ip.substring(0,master_node_ip.indexOf('\n'))
                 }
             }
         }
