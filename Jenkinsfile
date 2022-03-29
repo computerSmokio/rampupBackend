@@ -42,7 +42,7 @@ pipeline{
                 withCredentials([file(credentialsId:'ssh_keypair', variable:'ssh_key')]){
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} sudo chef-client -o deploy_instances::deploy_backend"
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic db-secrets --from-literal=db.entrypoint=${db_entrypoint} --from-literal=db.user=${db_user} --from-literal=db.pass=${db_pass} --from-literal=db.name=${db_name} -n rampup-backend-ns"
-                    sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic backend-secrets --from-literal=bk.url=${bk_url} --from-literal=bk.port=${bk_port} -n rampup-backend-ns"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic backend-secrets --from-literal=bk.port=${bk_port} -n rampup-backend-ns"
                 }
             }
         }
