@@ -1,7 +1,6 @@
 pipeline{
     agent any
     environment{
-        db_entrypoint=credentials('db_entrypoint')
         db_user=credentials('db_user')
         db_pass=credentials('db_pass')
         db_name=credentials('db_name')
@@ -34,6 +33,10 @@ pipeline{
                     }
                     sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                     sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
+                    db_endpoint  = sh(
+                        script: "aws rds describe-db-instances --region sa-east-1  --db-instance-identifier mysql-db --query 'DBInstances[*].Endpoint.Address' --output text"
+                        returnStdout: true)
+                    db_endpoint=db_endpoint.substring(0,db_endpoint.indexOf('\n'))
                 }
             }
         }
@@ -43,7 +46,7 @@ pipeline{
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl delete secret backend-secrets -n rampup-backend-ns --ignore-not-found"
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl delete secret db-secrets -n rampup-backend-ns --ignore-not-found"
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} sudo chef-client -o deploy_instances::deploy_backend"
-                    sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic db-secrets --from-literal=db.entrypoint=${db_entrypoint} --from-literal=db.user=${db_user} --from-literal=db.pass=${db_pass} --from-literal=db.name=${db_name} -n rampup-backend-ns"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic db-secrets --from-literal=db.entrypoint=${db_endpoint} --from-literal=db.user=${db_user} --from-literal=db.pass=${db_pass} --from-literal=db.name=${db_name} -n rampup-backend-ns"
                     sh "ssh -o StrictHostKeyChecking=no -i ${ssh_key} ec2-user@${master_node_ip} kubectl create secret generic backend-secrets --from-literal=bk.port=${bk_port} -n rampup-backend-ns"
                 }
             }
