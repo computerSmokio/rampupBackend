@@ -34,7 +34,7 @@ pipeline{
                     sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                     sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
                     db_endpoint  = sh(
-                        script: "aws rds describe-db-instances --region sa-east-1  --db-instance-identifier mysql-db --query 'DBInstances[*].Endpoint.Address' --output text"
+                        script: "aws rds describe-db-instances --region sa-east-1  --db-instance-identifier mysql-db --query 'DBInstances[*].Endpoint.Address' --output text",
                         returnStdout: true)
                     db_endpoint=db_endpoint.substring(0,db_endpoint.indexOf('\n'))
                 }
