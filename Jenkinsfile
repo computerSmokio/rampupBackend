@@ -30,13 +30,14 @@ pipeline{
                             script: "aws ec2 describe-instances --region sa-east-1  --filter Name=instance.group-name,Values=master-node-sg --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text",
                             returnStdout: true)
                         master_node_ip=master_node_ip.substring(0,master_node_ip.indexOf('\n'))
+                        db_endpoint  = sh(
+                            script: "aws rds describe-db-instances --region sa-east-1  --db-instance-identifier mysql-db --query 'DBInstances[*].Endpoint.Address' --output text",
+                            returnStdout: true)
+                        db_endpoint=db_endpoint.substring(0,db_endpoint.indexOf('\n'))
                     }
                     sh "docker rmi \$(docker image ls --filter reference='*/rampup-backend:*' --format {{.ID}}) || true"
                     sh "docker rmi \$(docker image ls --filter 'dangling=true' --format {{.ID}}) || true"
-                    db_endpoint  = sh(
-                        script: "aws rds describe-db-instances --region sa-east-1  --db-instance-identifier mysql-db --query 'DBInstances[*].Endpoint.Address' --output text",
-                        returnStdout: true)
-                    db_endpoint=db_endpoint.substring(0,db_endpoint.indexOf('\n'))
+
                 }
             }
         }
