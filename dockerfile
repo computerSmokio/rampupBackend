@@ -1,6 +1,5 @@
-FROM node:17-alpine3.14
+FROM node:16-alpine
 
-RUN mkdir /app
 WORKDIR /app
 
 COPY ./package.json /app
@@ -9,10 +8,8 @@ RUN npm install
 
 COPY . /app
 
-ARG DB_PORT
-ARG BACKEND_PORT
+ARG BACKEND_PORT=3000
 
-EXPOSE ${DB_PORT}
 EXPOSE ${BACKEND_PORT}
 
 CMD ["sh","-c", "node ./seeds.js ; node ./server.js"]

@@ -51,7 +51,8 @@ async function main () {
       ['Guardians of the Galaxy', '2014', 10, 'Anthony Miller', 'ComicBookHero.com'],
       ['Doctor Strange', '2016', 7, 'Anthony Miller', 'ComicBookHero.com'],
       ['Superman: Homecoming', '2017', 10, 'Chris Harris', 'International Movie Critic'],
-      ['Wonder Woman', '2017', 8, 'Martin Thomas', 'TheOne']
+      ['Wonder Woman', '2017', 8, 'Martin Thomas', 'TheOne'],
+      ['The Godfather', '1972', 10, 'Martin Thomas', 'TheOne']
     ]
     await pool.query(moviesQuery, [moviesValues])
 
